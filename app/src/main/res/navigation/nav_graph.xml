@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signUpAndLoginFragment">
+
+    <fragment
+        android:id="@+id/signUpAndLoginFragment"
+        android:name="com.example.nativeandroiddesign.ui.SignUpAndLoginFragment"
+        android:label="fragment_sign_up_and_login"
+        tools:layout="@layout/fragment_sign_up_and_login" >
+        <action
+            android:id="@+id/action_signUpAndLoginFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.nativeandroiddesign.ui.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <action
+            android:id="@+id/action_detailsFragment_to_signUpAndLoginFragment"
+            app:destination="@id/signUpAndLoginFragment" />
+    </fragment>
+</navigation>
