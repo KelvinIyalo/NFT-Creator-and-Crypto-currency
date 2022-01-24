@@ -10,17 +10,27 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.nativeandroiddesign.R
 import com.example.nativeandroiddesign.adapter.RecyclerViewAdapter
 import com.example.nativeandroiddesign.databinding.FragmentSignUpAndLoginBinding
+import com.example.nativeandroiddesign.utill.Resource
+import com.example.nativeandroiddesign.viewmodel.MyViewModel
 import com.example.testdesign.navigationUI
 import com.example.testdesign.registrationUI
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
     lateinit var binding: FragmentSignUpAndLoginBinding
 
-    //  var viewModel: MyViewModel by viewModels()
+    val viewModel: MyViewModel by viewModels()
     lateinit var MyAdapter: RecyclerViewAdapter
 
     override fun onCreateView(
@@ -30,22 +40,17 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
     ): View? {
         binding = FragmentSignUpAndLoginBinding.inflate(layoutInflater)
 
-
-
-        binding.apply {
-            navigationUI(
-                signupEmailET,
-                loginWebET,
-                btnGetStarted,
-                signupPhoneET,
-                navPhone,
-                navEmail
-            )
-        }
-
         binding.btnGetStarted.setOnClickListener {
             registrationSheetSetup()
+
+            MyAdapter = RecyclerViewAdapter()
+
         }
+
+
+
+      binding.apply { navigationUI(signupEmailET, loginWebET, btnGetStarted, signupPhoneET, navPhone, navEmail) }
+
         binding.termsCondition.setOnClickListener {
             Toast.makeText(activity, "This is Experimental", Toast.LENGTH_SHORT).show()
         }
@@ -68,6 +73,7 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         }
         bottomSheetView.findViewById<View>(R.id.login_btn).setOnClickListener {
             sendGiftBottomSheet()
+            myViewModelSetup()
         }
         val fullName = bottomSheetView.findViewById<EditText>(R.id.signup_fullname_ET)
         val fullNameLabel = bottomSheetView.findViewById<TextView>(R.id.fullname_label)
@@ -87,16 +93,51 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
 
         val sendGiftBottomSheet =
             BottomSheetDialog(requireContext(), R.style.bottomSheetDialogTheme)
-        val sendGiftBottomSheetView = LayoutInflater.from(context)
-            .inflate(
-                R.layout.gift_layout,
-                view?.findViewById<ConstraintLayout?>(R.id.sendGift_screen)
-            )
+        val sendGiftBottomSheetView = LayoutInflater.from(context).inflate(R.layout.gift_layout, view?.findViewById<ConstraintLayout?>(R.id.sendGift_screen))
+        val recyclerView = sendGiftBottomSheetView.findViewById<RecyclerView>(R.id.recyclerView_gift)
+
         sendGiftBottomSheetView.findViewById<View>(R.id.btn_dismiss).setOnClickListener {
             sendGiftBottomSheet.dismiss()
             Toast.makeText(activity, "Registration Canceled", Toast.LENGTH_SHORT).show()
         }
+
+
+        recyclerView.apply {
+            adapter = MyAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
+        MyAdapter.setOnItemClickListener {
+
+            val bundle = Bundle().apply { putSerializable("users", it) }
+
+            findNavController().navigate(R.id.action_signUpAndLoginFragment_to_detailsFragment, bundle) }
+
         sendGiftBottomSheet.setContentView(sendGiftBottomSheetView)
         sendGiftBottomSheet.show()
     }
+
+fun myViewModelSetup(){
+    viewModel.userList.observe(viewLifecycleOwner, Observer {   response ->
+        when(response){
+            is Resource.Loading ->
+            {
+                Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show()
+            }
+
+            is Resource.Success ->{
+                response.data?.let {
+                    MyAdapter.differ.submitList(it.toList())
+                }
+            }
+            is Resource.Error ->
+            {
+                response.Message?.let { message ->
+                    Snackbar.make(binding.root,"An Error occurred:$message ", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+
+    })
+}
 }

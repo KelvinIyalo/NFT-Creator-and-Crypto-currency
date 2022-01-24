@@ -2,6 +2,7 @@ package com.example.nativeandroiddesign.dataModule
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class UserClassItem(
     val address: Address? = null,
@@ -12,4 +13,4 @@ data class UserClassItem(
     val phone: String? = null, // 024-648-3804
     val username: String? = null, // Moriah.Stanton
     val website: String? = null // ambrose.net
-)
+):Serializable
