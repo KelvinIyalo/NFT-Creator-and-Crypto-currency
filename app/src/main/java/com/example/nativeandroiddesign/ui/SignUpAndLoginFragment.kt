@@ -48,8 +48,17 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         }
 
 
-
-      binding.apply { navigationUI(signupEmailET, loginWebET, btnGetStarted, signupPhoneET, navPhone, navEmail) }
+    //Navigation/UI Authentication
+        binding.apply {
+            navigationUI(
+                signupEmailET,
+                loginWebET,
+                btnGetStarted,
+                signupPhoneET,
+                navPhone,
+                navEmail
+            )
+        }
 
         binding.termsCondition.setOnClickListener {
             Toast.makeText(activity, "This is Experimental", Toast.LENGTH_SHORT).show()
@@ -59,6 +68,7 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         return binding.root
     }
 
+        //Registration Bottom Sheet
     fun registrationSheetSetup() {
 
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.bottomSheetDialogTheme)
@@ -74,6 +84,7 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         bottomSheetView.findViewById<View>(R.id.login_btn).setOnClickListener {
             sendGiftBottomSheet()
             myViewModelSetup()
+            bottomSheet.dismiss()
         }
         val fullName = bottomSheetView.findViewById<EditText>(R.id.signup_fullname_ET)
         val fullNameLabel = bottomSheetView.findViewById<TextView>(R.id.fullname_label)
@@ -89,12 +100,17 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         bottomSheet.show()
     }
 
+    //RecyclerView Bottom Sheet
     fun sendGiftBottomSheet() {
 
         val sendGiftBottomSheet =
             BottomSheetDialog(requireContext(), R.style.bottomSheetDialogTheme)
-        val sendGiftBottomSheetView = LayoutInflater.from(context).inflate(R.layout.gift_layout, view?.findViewById<ConstraintLayout?>(R.id.sendGift_screen))
-        val recyclerView = sendGiftBottomSheetView.findViewById<RecyclerView>(R.id.recyclerView_gift)
+        val sendGiftBottomSheetView = LayoutInflater.from(context).inflate(
+            R.layout.gift_layout,
+            view?.findViewById<ConstraintLayout?>(R.id.sendGift_screen)
+        )
+        val recyclerView =
+            sendGiftBottomSheetView.findViewById<RecyclerView>(R.id.recyclerView_gift)
 
         sendGiftBottomSheetView.findViewById<View>(R.id.btn_dismiss).setOnClickListener {
             sendGiftBottomSheet.dismiss()
@@ -107,37 +123,43 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
             layoutManager = LinearLayoutManager(activity)
         }
         MyAdapter.setOnItemClickListener {
-
             val bundle = Bundle().apply { putSerializable("users", it) }
 
-            findNavController().navigate(R.id.action_signUpAndLoginFragment_to_detailsFragment, bundle) }
+            findNavController().navigate(
+                R.id.action_signUpAndLoginFragment_to_detailsFragment,
+                bundle
+            )
+            sendGiftBottomSheet.dismiss()
+        }
 
         sendGiftBottomSheet.setContentView(sendGiftBottomSheetView)
         sendGiftBottomSheet.show()
     }
 
-fun myViewModelSetup(){
-    viewModel.userList.observe(viewLifecycleOwner, Observer {   response ->
-        when(response){
-            is Resource.Loading ->
-            {
-                Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show()
-            }
-
-            is Resource.Success ->{
-                response.data?.let {
-                    MyAdapter.differ.submitList(it.toList())
+    fun myViewModelSetup() {
+        viewModel.userList.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show()
                 }
-            }
-            is Resource.Error ->
-            {
-                response.Message?.let { message ->
-                    Snackbar.make(binding.root,"An Error occurred:$message ", Snackbar.LENGTH_SHORT).show()
+
+                is Resource.Success -> {
+                    response.data?.let {
+                        MyAdapter.differ.submitList(it.toList())
+                    }
                 }
+                is Resource.Error -> {
+                    response.Message?.let { message ->
+                        Snackbar.make(
+                            binding.root,
+                            "An Error occurred:$message ",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
             }
 
-        }
-
-    })
-}
+        })
+    }
 }
