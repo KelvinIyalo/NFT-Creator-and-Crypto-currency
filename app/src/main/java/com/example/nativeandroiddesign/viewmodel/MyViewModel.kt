@@ -8,6 +8,7 @@ import android.os.Build
 import android.provider.ContactsContract
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.nativeandroiddesign.dataModule.UserClass
@@ -38,6 +39,25 @@ class MyViewModel @ViewModelInject constructor(
             safeUsersListcall()
         }
     }
+
+
+    //DataBase setup
+
+    fun Updert(userClassItem: UserClassItem) = viewModelScope.launch {
+        repository.Upsert(userClassItem)
+    }
+
+    fun delete(userClassItem: UserClassItem) = viewModelScope.launch {
+        repository.delete(userClassItem)
+    }
+
+    fun getAllFromDB(): LiveData<List<UserClassItem>> = repository.getAllFromDB()
+
+    fun getSearchFromDB(title:String): List<UserClassItem> = repository.getSearchFromDB(title)
+
+
+
+
 
     private  fun handleUsersList(response: Response<UserClass>):Resource<UserClass>{
         if (response.isSuccessful){
