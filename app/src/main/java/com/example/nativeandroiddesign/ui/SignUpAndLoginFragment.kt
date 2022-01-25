@@ -1,5 +1,6 @@
 package com.example.nativeandroiddesign.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -48,7 +50,7 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         }
 
 
-    //Navigation/UI Authentication
+        //Navigation/UI Authentication
         binding.apply {
             navigationUI(
                 signupEmailET,
@@ -68,7 +70,7 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
         return binding.root
     }
 
-        //Registration Bottom Sheet
+    //Registration Bottom Sheet
     fun registrationSheetSetup() {
 
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.bottomSheetDialogTheme)
@@ -116,13 +118,16 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
             sendGiftBottomSheet.dismiss()
             Toast.makeText(activity, "Registration Canceled", Toast.LENGTH_SHORT).show()
         }
+   // val search = sendGiftBottomSheetView.findViewById<EditText>(R.id.search_text)
 
 
         recyclerView.apply {
             adapter = MyAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+
         MyAdapter.setOnItemClickListener {
+             viewModel.Updert(it)
             val bundle = Bundle().apply { putSerializable("users", it) }
 
             findNavController().navigate(
@@ -144,8 +149,12 @@ class SignUpAndLoginFragment : Fragment(R.layout.fragment_sign_up_and_login) {
                 }
 
                 is Resource.Success -> {
-                    response.data?.let {
-                        MyAdapter.differ.submitList(it.toList())
+
+                    response.data?.let {    result ->
+
+                        MyAdapter.differ.submitList(result.toList())
+
+
                     }
                 }
                 is Resource.Error -> {

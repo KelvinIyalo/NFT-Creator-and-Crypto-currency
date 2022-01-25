@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Native Android Design</string>
     <string name="infoDetails">Enter an Account ID to use with your NEAR account. Your Account ID will be used for all NEAR operations, including sending and receiving assets.</string>
+    <string name="userInfo"> </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="gift_an_nft">Gift an NFT</string>
 </resources>

@@ -47,9 +47,9 @@ class MyViewModel @ViewModelInject constructor(
         repository.Upsert(userClassItem)
     }
 
-    fun delete(userClassItem: UserClassItem) = viewModelScope.launch {
-        repository.delete(userClassItem)
-    }
+ //   fun delete(userClassItem: UserClassItem) = viewModelScope.launch {
+ //       repository.delete(userClassItem)
+ //   }
 
     fun getAllFromDB(): LiveData<List<UserClassItem>> = repository.getAllFromDB()
 

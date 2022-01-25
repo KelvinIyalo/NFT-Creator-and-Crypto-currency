@@ -66,6 +66,7 @@
                 android:layout_width="177dp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="16dp"
+                app:backgroundTint="@color/btn_blue"
                 android:background="@drawable/btn_bg_blue"
                 android:drawableEnd="@drawable/forward"
                 android:text="Send Gift"
@@ -80,6 +81,39 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/nft_logo"
+        app:layout_constraintEnd_toStartOf="@+id/see_all"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+    <TextView
+        android:textColor="@color/btn_blue"
+        android:id="@+id/see_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="23dp"
+        android:text="See All"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="218dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

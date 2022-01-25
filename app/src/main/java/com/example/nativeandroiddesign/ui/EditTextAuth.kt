@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import com.example.nativeandroiddesign.R
+import com.example.nativeandroiddesign.viewmodel.MyViewModel
 
 private fun editTextAuth(
     signupEmailET: EditText,
@@ -94,6 +95,7 @@ fun registrationUI(
 
 ){
 
+
     fullName.addTextChangedListener{
         if (it.toString().length > 0){
             fullName.setBackgroundResource(R.drawable.bg_focus)
@@ -105,20 +107,22 @@ fun registrationUI(
 
     walletId.addTextChangedListener{
         if (it.toString().length > 0){
+            if(it.toString().length > 4 && fullName.toString().length > 4){
+                btnGetStarted.isEnabled = true
+                btnGetStarted.setBackgroundColor(Color.BLUE)
+            }
+
+
             walletId.setBackgroundResource(R.drawable.bg_focus)
             walletIdLabel.setTextColor(Color.BLUE)
+
         }else{
+            btnGetStarted.isEnabled = false
             fullName.setBackgroundResource(R.drawable.et_bg)
         }
     }
 
-    if(walletId.text.toString().length > 4  && walletId.text.toString().length > 4 ){
-        btnGetStarted.isEnabled = true
-        btnGetStarted.setBackgroundColor(Color.BLUE)
 
-    }else{
-        btnGetStarted.isEnabled = false
-    }
 
 
 }

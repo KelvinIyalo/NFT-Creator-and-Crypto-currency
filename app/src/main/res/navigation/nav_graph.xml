@@ -9,7 +9,7 @@
         android:id="@+id/signUpAndLoginFragment"
         android:name="com.example.nativeandroiddesign.ui.SignUpAndLoginFragment"
         android:label="fragment_sign_up_and_login"
-        tools:layout="@layout/fragment_sign_up_and_login" >
+        tools:layout="@layout/fragment_sign_up_and_login">
         <action
             android:id="@+id/action_signUpAndLoginFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -18,17 +18,16 @@
         android:id="@+id/detailsFragment"
         android:name="com.example.nativeandroiddesign.ui.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details"
-        >
+        tools:layout="@layout/fragment_details">
 
         <action
             android:id="@+id/action_detailsFragment_to_signUpAndLoginFragment"
             app:destination="@id/signUpAndLoginFragment" />
         <argument
-            app:nullable="true"
-            android:defaultValue="@null"
             android:name="userClass"
-            app:argType="com.example.nativeandroiddesign.dataModule.UserClassItem" />
+            android:defaultValue="@null"
+            app:argType="com.example.nativeandroiddesign.dataModule.UserClassItem"
+            app:nullable="true" />
 
     </fragment>
 </navigation>
